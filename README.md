@@ -1,4 +1,4 @@
-# Ansible Environment Repository
+# Sample Environment Repository
 
 This repository provides a structured Ansible environment where each individual site is managed as a separate `site.yaml` playbook. The setup ensures modularity, reusability, and easy management of configurations across different environments.
 
