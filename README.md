@@ -1,5 +1,3 @@
-# example-site-repo
-
 # Ansible Environment Repository
 
 This repository provides a structured Ansible environment where each individual site is managed as a separate `site.yaml` playbook. The setup ensures modularity, reusability, and easy management of configurations across different environments.
@@ -7,30 +5,30 @@ This repository provides a structured Ansible environment where each individual 
 ## Repository Structure
 
 ```
-ansible-environment-repo/
-│── inventories/
-│   ├── production/
-│   │   ├── group_vars/
-│   │   │   ├── all.yml
-│   │   │   ├── site1.yml
-│   │   │   ├── site2.yml
-│   │   ├── hosts
-│   ├── staging/
-│   │   ├── group_vars/
-│   │   │   ├── all.yml
-│   │   │   ├── site1.yml
-│   │   │   ├── site2.yml
-│   │   ├── hosts
-│── playbooks/
-│   ├── site1.yaml
-│   ├── site2.yaml
-│   ├── common.yaml
-│── roles/
-│   ├── common/
-│   ├── site1/
-│   ├── site2/
-│── ansible.cfg
-│── requirements.yml
+ansible/
+│   ├── inventories/
+│   │   ├── production/
+│   │   │   ├── group_vars/
+│   │   │   │   ├── all.yml
+│   │   │   │   ├── site1.yml
+│   │   │   │   ├── site2.yml
+│   │   │   ├── hosts
+│   │   ├── staging/
+│   │   │   ├── group_vars/
+│   │   │   │   ├── all.yml
+│   │   │   │   ├── site1.yml
+│   │   │   │   ├── site2.yml
+│   │   │   ├── hosts
+│   ├── playbooks/
+│   │   ├── site1.yaml
+│   │   ├── site2.yaml
+│   │   ├── common.yaml
+│   ├── roles/
+│   │   ├── common/
+│   │   ├── site1/
+│   │   ├── site2/
+│   ├── ansible.cfg
+│   ├── requirements.yml
 │── README.md
 ```
 
@@ -38,7 +36,7 @@ ansible-environment-repo/
 
 ### Production Inventory
 
-#### `inventories/production/hosts`
+#### `ansible/inventories/production/hosts`
 
 ```ini
 [site1]
@@ -52,7 +50,7 @@ site2-server2 ansible_host=192.168.2.11
 
 ### Staging Inventory
 
-#### `inventories/staging/hosts`
+#### `ansible/inventories/staging/hosts`
 
 ```ini
 [site1]
@@ -66,14 +64,14 @@ staging-site2-server1 ansible_host=192.168.2.20
 
 Each site has its own configuration stored under `group_vars`.
 
-#### `inventories/production/group_vars/site1.yml`
+#### `ansible/inventories/production/group_vars/site1.yml`
 
 ```yaml
 site_name: "Site 1"
 app_version: "1.0"
 ```
 
-#### `inventories/production/group_vars/site2.yml`
+#### `ansible/inventories/production/group_vars/site2.yml`
 
 ```yaml
 site_name: "Site 2"
@@ -84,7 +82,7 @@ app_version: "2.0"
 
 Each site has a dedicated playbook for deployment and configuration.
 
-#### `playbooks/site1.yaml`
+#### `ansible/playbooks/site1.yaml`
 
 ```yaml
 - name: Configure Site 1
@@ -95,7 +93,7 @@ Each site has a dedicated playbook for deployment and configuration.
     - site1
 ```
 
-#### `playbooks/site2.yaml`
+#### `ansible/playbooks/site2.yaml`
 
 ```yaml
 - name: Configure Site 2
@@ -106,7 +104,7 @@ Each site has a dedicated playbook for deployment and configuration.
     - site2
 ```
 
-#### `playbooks/common.yaml`
+#### `ansible/playbooks/common.yaml`
 
 ```yaml
 - name: Apply common configurations
@@ -120,7 +118,7 @@ Each site has a dedicated playbook for deployment and configuration.
 
 Each site has its own role for specific configurations.
 
-#### Example `roles/site1/tasks/main.yml`
+#### Example `ansible/roles/site1/tasks/main.yml`
 
 ```yaml
 - name: Install required packages for Site 1
@@ -134,7 +132,7 @@ Each site has its own role for specific configurations.
     dest: /etc/nginx/sites-available/site1
 ```
 
-#### Example `roles/site2/tasks/main.yml`
+#### Example `ansible/roles/site2/tasks/main.yml`
 
 ```yaml
 - name: Install required packages for Site 2
@@ -152,14 +150,14 @@ Each site has its own role for specific configurations.
 
 Ensure Ansible is correctly configured to use the correct inventory.
 
-#### `ansible.cfg`
+#### `ansible/ansible.cfg`
 
 ```ini
 [defaults]
-inventory = inventories/production
+inventory = ansible/inventories/production
 host_key_checking = False
 retry_files_enabled = False
-roles_path = roles
+roles_path = ansible/roles
 ```
 
 ## Running Playbooks
@@ -167,13 +165,13 @@ roles_path = roles
 To deploy `site1` in the `production` environment:
 
 ```bash
-ansible-playbook -i inventories/production/hosts playbooks/site1.yaml
+ansible-playbook -i ansible/inventories/production/hosts ansible/playbooks/site1.yaml
 ```
 
 To deploy `site2` in the `staging` environment:
 
 ```bash
-ansible-playbook -i inventories/staging/hosts playbooks/site2.yaml
+ansible-playbook -i ansible/inventories/staging/hosts ansible/playbooks/site2.yaml
 ```
 
 ## Version Control
