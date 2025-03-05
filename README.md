@@ -16,6 +16,9 @@ This repository provides a structured Ansible environment where each individual 
 │   │   ├── common/         # Common configurations
 │   │   ├── webserver/      # Webserver role
 │   │   ├── database/       # Database role
+│   │   ├── site1/          # Site1 roles
+│   │   ├── site2/          # Site2 roles
+│   │   ├── site3/          # Site3 roles
 │   ├── site-configs/       # Per-site Ansible configurations
 │   │   ├── site1.yaml      # Site 1 playbook
 │   │   ├── site2.yaml      # Site 2 playbook
@@ -37,33 +40,31 @@ This repository provides a structured Ansible environment where each individual 
 
 ### Production Inventory
 
-#### `ansible/inventory/production/hosts`
+#### `ansible/inventory/production`
 
+---
+
+## Setting Up Inventory Files
+
+Ansible inventory files define which hosts belong to which environment (e.g., `production`, `staging`). These are located in the `inventory/` directory.
+
+### Example Inventory File (`inventory/production`)
 ```ini
-[site1]
-site1-server1 ansible_host=192.168.1.10
-site1-server2 ansible_host=192.168.1.11
+[webserver]
+web1.example.com
+web2.example.com
 
-[site2]
-site2-server1 ansible_host=192.168.2.10
-site2-server2 ansible_host=192.168.2.11
-```
+[database]
+db1.example.com
 
-### Staging Inventory
-
-#### `ansible/inventory/staging/hosts`
-
-```ini
-[site1]
-staging-site1-server1 ansible_host=192.168.1.20
-
-[site2]
-staging-site2-server1 ansible_host=192.168.2.20
+[all:vars]
+ansible_user=admin
+ansible_ssh_private_key_file=~/.ssh/id_rsa
 ```
 
 ## Site Variables
 
-Each site has its own configuration stored under `group_vars`.
+Each site can have its own configuration stored under `group_vars`.
 
 #### `ansible/inventory/production/group_vars/site1.yml`
 
@@ -81,7 +82,7 @@ app_version: "2.0"
 
 ## Playbooks
 
-Each site has a dedicated playbook for deployment and configuration.
+Each site can have a dedicated playbook for deployment and configuration.
 
 #### `ansible/playbooks/site1.yaml`
 
@@ -117,7 +118,7 @@ Each site has a dedicated playbook for deployment and configuration.
 
 ## Roles
 
-Each site has its own role for specific configurations.
+Each site can have its own role for specific configurations.
 
 #### Example `ansible/roles/site1/tasks/main.yml`
 
@@ -147,6 +148,97 @@ Each site has its own role for specific configurations.
     dest: /etc/apache2/sites-available/site2
 ```
 
+## Setting Up Site-Specific Playbooks (site.yml)
+
+Each siteX.yml file inside site-configs/ is a site-specific Ansible playbook that defines how a particular site should be deployed.
+
+### Example siteX.yml
+```
+---
+- name: Deploy Site X
+  hosts: webserver
+  become: true
+  vars_files:
+    - "../inventory/group_vars/webserver.yml"
+    - "../inventory/host_vars/siteX.yml"
+
+  roles:
+    - role: common
+    - role: webserver
+    - role: database
+
+  tasks:
+    - name: Ensure webserver is installed
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy site configuration
+      template:
+        src: "../templates/siteX.conf.j2"
+        dest: "/etc/nginx/sites-available/siteX.conf"
+
+    - name: Enable site configuration
+      file:
+        src: "/etc/nginx/sites-available/siteX.conf"
+        dest: "/etc/nginx/sites-enabled/siteX.conf"
+        state: link
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+```
+
+## Setting Up Ansible Roles
+
+Roles are reusable components that encapsulate tasks, handlers, and variables. They are stored in the `roles/` directory.
+
+### Creating a New Role
+
+Use the following command to create a new role:
+```sh
+ansible-galaxy init roles/new_role
+```
+
+### Example `roles/webserver/tasks/main.yml`
+```yaml
+---
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: present
+```
+
+### Using a Role in a Playbook
+```yaml
+---
+- name: Configure Webserver
+  hosts: webserver
+  become: true
+  roles:
+    - webserver
+```
+
+---
+
+## Running the Deployment
+
+To deploy a specific site:
+```sh
+ansible-playbook -i ansible/inventory/production ansible/site-configs/site1.yml
+```
+
+To deploy all sites together:
+```sh
+ansible-playbook -i ansible/inventory/production ansible/playbooks/deploy.yml
+```
+
+To rollback a deployment:
+```sh
+ansible-playbook -i ansible/inventory/production ansible/playbook/rollback.yml
+```
+
 ## Ansible Configuration
 
 Ensure Ansible is correctly configured to use the correct inventory.
@@ -173,19 +265,6 @@ To deploy `site2` in the `staging` environment:
 
 ```bash
 ansible-playbook -i ansible/inventory/staging/hosts ansible/playbooks/site2.yaml
-```
-
-## Version Control
-
-To initialize and push the repository to Git:
-
-```bash
-git init
-git add .
-git commit -m "Initial Ansible environment setup"
-git branch -M main
-git remote add origin <your-repo-url>
-git push -u origin main
 ```
 
 ## Conclusion
