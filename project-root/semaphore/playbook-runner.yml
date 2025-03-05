@@ -1,0 +1,12 @@
+version: v1.0
+name: Playbook Runner
+blocks:
+  - name: Run Playbook
+    task:
+      env_vars:
+        - name: PLAYBOOK
+          value: "deploy.yml"
+      jobs:
+        - name: Execute Playbook
+          commands:
+            - ansible-playbook -i ansible/inventory/production ansible/playbooks/${PLAYBOOK}

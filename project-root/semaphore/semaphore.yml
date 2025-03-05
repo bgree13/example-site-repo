@@ -34,6 +34,6 @@ blocks:
       jobs:
         - name: Run Ansible Playbooks
           commands:
-            - ansible-playbook -i ansible/inventory/production/hosts playbooks/site1.yaml --extra-vars "ansible_user=deploy_user" &
-            - ansible-playbook -i ansible/inventory/production/hosts playbooks/site2.yaml --extra-vars "ansible_user=deploy_user" &
+            - ansible-playbook -i ansible/inventory/production/hosts ansible/playbooks/site1.yaml --extra-vars "ansible_user=deploy_user" &
+            - ansible-playbook -i ansible/inventory/production/hosts ansible/playbooks/site2.yaml --extra-vars "ansible_user=deploy_user" &
             - wait
