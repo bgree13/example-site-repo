@@ -222,6 +222,18 @@ ansible-galaxy init roles/new_role
 
 ---
 
+### Using a Role in a Playbook
+```yaml
+---
+- name: Configure Webserver
+  hosts: webserver
+  become: true
+  roles:
+    - webserver
+```
+
+---
+
 ## Running the Deployment
 
 To deploy a specific site:
@@ -269,4 +281,4 @@ ansible-playbook -i ansible/inventory/staging/hosts ansible/playbooks/site2.yaml
 
 ## Conclusion
 
-This setup provides a scalable and modular way to manage multiple site deployments with Ansible. Each site has its own configuration, playbook, and role, ensuring a clean separation of concerns. Modify the repository structure as needed to fit your infrastructure requirements.
+This setup provides a way to manage multiple site deployments with Ansible whiles still having the ability to use the base Ansible structure. Each site has its own configuration, playbook, and role, ensuring a clean separation of concerns. Modify the repository structure as needed to fit your infrastructure requirements.
