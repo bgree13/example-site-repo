@@ -201,6 +201,24 @@ Use the following command to create a new role:
 ansible-galaxy init roles/new_role
 ```
 
+This creates a directory structure like:
+```
+roles/
+│── new_role/
+│   ├── tasks/                # Main tasks
+│   │   ├── main.yml
+│   ├── handlers/             # Handlers (e.g., service restarts)
+│   │   ├── main.yml
+│   ├── templates/            # Jinja2 templates (e.g., Nginx configs)
+│   ├── files/                # Static files
+│   ├── vars/                 # Role-specific variables
+│   │   ├── main.yml
+│   ├── defaults/             # Default variables
+│   │   ├── main.yml
+│   ├── meta/                 # Role metadata
+│   ├── README.md             # Documentation
+```
+
 ### Example `roles/webserver/tasks/main.yml`
 ```yaml
 ---
