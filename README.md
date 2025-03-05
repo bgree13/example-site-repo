@@ -5,34 +5,31 @@ This repository provides a structured Ansible environment where each individual 
 ## Repository Structure
 
 ```
-ansible/
-│   ├── inventories/
-│   │   ├── production/
-│   │   │   ├── group_vars/
-│   │   │   │   ├── all.yml
-│   │   │   │   ├── site1.yml
-│   │   │   │   ├── site2.yml
-│   │   │   ├── hosts
-│   │   ├── staging/
-│   │   │   ├── group_vars/
-│   │   │   │   ├── all.yml
-│   │   │   │   ├── site1.yml
-│   │   │   │   ├── site2.yml
-│   │   │   ├── hosts
-│   ├── playbooks/
-│   │   ├── site1.yaml
-│   │   ├── site2.yaml
-│   │   ├── common.yaml
-│   ├── roles/
-│   │   ├── common/
-│   │   ├── site1/
-│   │   ├── site2/
-│   ├── ansible.cfg
-│   ├── requirements.yml
-semaphore/
-│   ├── semaphore.yml
-│── README.md
-
+/project-root/
+│── ansible/
+│   ├── inventory/          # Ansible inventory files
+│   │   ├── production      # Production inventory
+│   │   ├── staging         # Staging inventory
+│   │   ├── group_vars/     # Group-specific variables
+│   │   ├── host_vars/      # Host-specific variables
+│   ├── roles/              # Ansible roles
+│   │   ├── common/         # Common configurations
+│   │   ├── webserver/      # Webserver role
+│   │   ├── database/       # Database role
+│   ├── site-configs/       # Per-site Ansible configurations
+│   │   ├── site1.yaml      # Site 1 playbook
+│   │   ├── site2.yaml      # Site 2 playbook
+│   │   ├── site3.yaml      # Site 3 playbook
+│   ├── playbooks/          # General playbooks
+│   │   ├── deploy.yml      # Main deployment playbook
+│   │   ├── rollback.yml    # Rollback playbook
+│   ├── ansible.cfg         # Ansible configuration file
+│   ├── requirements.yml    # Dependencies for roles
+│   ├── README.md           # Documentation
+│
+│── semaphore/
+│   ├── semaphore.yml       # Semaphore CI/CD pipeline configuration
+│   ├── playbook-runner.yml # Semaphore playbook runner
 
 ```
 
@@ -40,7 +37,7 @@ semaphore/
 
 ### Production Inventory
 
-#### `ansible/inventories/production/hosts`
+#### `ansible/inventory/production/hosts`
 
 ```ini
 [site1]
