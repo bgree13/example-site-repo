@@ -29,7 +29,11 @@ ansible/
 │   │   ├── site2/
 │   ├── ansible.cfg
 │   ├── requirements.yml
+semaphore/
+│   ├── semaphore.yml
 │── README.md
+
+
 ```
 
 ## Inventory Configuration
