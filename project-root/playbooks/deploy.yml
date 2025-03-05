@@ -1,0 +1,5 @@
+- name: Deploy All Sites
+  hosts: all
+  become: yes
+  roles:
+    - common

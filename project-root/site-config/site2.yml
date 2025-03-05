@@ -1,0 +1,6 @@
+- name: Site1 Deployment
+  hosts: site2
+  become: yes
+  roles:
+    - common
+    - webserver
