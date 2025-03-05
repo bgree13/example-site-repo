@@ -297,6 +297,56 @@ To deploy `site2` in the `staging` environment:
 ansible-playbook -i ansible/inventory/staging/hosts ansible/playbooks/site2.yaml
 ```
 
+## CI/CD Pipeline with SemaphoreCI
+
+This repository includes a CI/CD pipeline using SemaphoreCI to automatically test and deploy Ansible playbooks.
+
+### SemaphoreCI Configuration
+
+Create a `.semaphore/semaphore.yml` file with the following content:
+
+```yaml
+vcnreate ame: Ansible Deployment Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2204
+
+blocks:
+  - name: Install Dependencies
+    task:
+      jobs:
+        - name: Setup Ansible
+          commands:
+            - checkout
+            - sudo apt update && sudo apt install -y ansible
+            - ansible --version
+
+  - name: Lint and Test Ansible Playbooks
+    task:
+      jobs:
+        - name: Run Ansible Lint
+          commands:
+            - ansible-lint playbooks/*.yaml
+        - name: Run Syntax Check
+          commands:
+            - ansible-playbook --syntax-check -i inventories/production/hosts playbooks/site1.yaml &
+            - ansible-playbook --syntax-check -i inventories/production/hosts playbooks/site2.yaml &
+            - wait
+
+  - name: Deploy to Production
+    task:
+      prologue:
+        commands:
+          - checkout
+      jobs:
+        - name: Run Ansible Playbooks
+          commands:
+            - ansible-playbook -i inventories/production/hosts playbooks/site1.yaml --extra-vars "ansible_user=deploy_user" &
+            - ansible-playbook -i inventories/production/hosts playbooks/site2.yaml --extra-vars "ansible_user=deploy_user" &
+            - wait
+```
+
 ## Conclusion
 
 This setup provides a way to manage multiple site deployments with Ansible whiles still having the ability to use the base Ansible structure. Each site has its own configuration, playbook, and role, ensuring a clean separation of concerns. Modify the repository structure as needed to fit your infrastructure requirements.
