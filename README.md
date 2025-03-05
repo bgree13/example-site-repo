@@ -19,6 +19,19 @@ This repository provides a structured Ansible environment where each individual 
 │   │   ├── site1/          # Site1 roles
 │   │   ├── site2/          # Site2 roles
 │   │   ├── site3/          # Site3 roles
+|   |       │── site_role/
+|   |       │   ├── tasks/                # Main tasks
+|   |       │   │   ├── main.yml
+|   |       │   ├── handlers/             # Handlers (e.g., service restarts)
+|           │   │   ├── main.yml
+|   |       │   ├── templates/            # Jinja2 templates (e.g., Nginx configs)
+|   |       │   ├── files/                # Static files
+|   |       │   ├── vars/                 # Role-specific variables
+|   |       │   │   ├── main.yml
+|   |       │   ├── defaults/             # Default variables
+|   |       │   │   ├── main.yml
+|   |       │   ├── meta/                 # Role metadata
+|   |       │   ├── README.md             # Documentation
 │   ├── site-configs/       # Per-site Ansible configurations
 │   │   ├── site1.yaml      # Site 1 playbook
 │   │   ├── site2.yaml      # Site 2 playbook
