@@ -1,0 +1,39 @@
+vcnreate ame: Ansible Deployment Pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu2204
+
+blocks:
+  - name: Install Dependencies
+    task:
+      jobs:
+        - name: Setup Ansible
+          commands:
+            - checkout
+            - sudo apt update && sudo apt install -y ansible
+            - ansible --version
+
+  - name: Lint and Test Ansible Playbooks
+    task:
+      jobs:
+        - name: Run Ansible Lint
+          commands:
+            - ansible-lint playbooks/*.yaml
+        - name: Run Syntax Check
+          commands:
+            - ansible-playbook --syntax-check -i ansible/inventory/production/hosts ansible/playbooks/site1.yaml &
+            - ansible-playbook --syntax-check -i ansible/inventory/production/hosts ansible/playbooks/site2.yaml &
+            - wait
+
+  - name: Deploy to Production
+    task:
+      prologue:
+        commands:
+          - checkout
+      jobs:
+        - name: Run Ansible Playbooks
+          commands:
+            - ansible-playbook -i ansible/inventory/production/hosts ansible/playbooks/site1.yaml --extra-vars "ansible_user=deploy_user" &
+            - ansible-playbook -i ansible/inventory/production/hosts ansible/playbooks/site2.yaml --extra-vars "ansible_user=deploy_user" &
+            - wait
