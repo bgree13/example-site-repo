@@ -51,7 +51,7 @@ site2-server2 ansible_host=192.168.2.11
 
 ### Staging Inventory
 
-#### `ansible/inventories/staging/hosts`
+#### `ansible/inventory/staging/hosts`
 
 ```ini
 [site1]
@@ -65,14 +65,14 @@ staging-site2-server1 ansible_host=192.168.2.20
 
 Each site has its own configuration stored under `group_vars`.
 
-#### `ansible/inventories/production/group_vars/site1.yml`
+#### `ansible/inventory/production/group_vars/site1.yml`
 
 ```yaml
 site_name: "Site 1"
 app_version: "1.0"
 ```
 
-#### `ansible/inventories/production/group_vars/site2.yml`
+#### `ansible/inventory/production/group_vars/site2.yml`
 
 ```yaml
 site_name: "Site 2"
@@ -155,7 +155,7 @@ Ensure Ansible is correctly configured to use the correct inventory.
 
 ```ini
 [defaults]
-inventory = ansible/inventories/production
+inventory = ansible/inventory/production
 host_key_checking = False
 retry_files_enabled = False
 roles_path = ansible/roles
@@ -166,13 +166,13 @@ roles_path = ansible/roles
 To deploy `site1` in the `production` environment:
 
 ```bash
-ansible-playbook -i ansible/inventories/production/hosts ansible/playbooks/site1.yaml
+ansible-playbook -i ansible/inventory/production/hosts ansible/playbooks/site1.yaml
 ```
 
 To deploy `site2` in the `staging` environment:
 
 ```bash
-ansible-playbook -i ansible/inventories/staging/hosts ansible/playbooks/site2.yaml
+ansible-playbook -i ansible/inventory/staging/hosts ansible/playbooks/site2.yaml
 ```
 
 ## Version Control
