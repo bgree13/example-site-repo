@@ -303,7 +303,7 @@ This repository includes a CI/CD pipeline using SemaphoreCI to automatically tes
 
 ### SemaphoreCI Configuration
 
-Create a `.semaphore/semaphore.yml` file with the following content:
+Create a `semaphore/semaphore.yml` file with the following content:
 
 ```yaml
 vcnreate ame: Ansible Deployment Pipeline
