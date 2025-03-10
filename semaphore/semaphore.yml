@@ -12,7 +12,7 @@ blocks:
         - name: Setup Ansible
           commands:
             - checkout
-            - sudo apt update && sudo apt install -y ansible
+            - sudo apt update && sudo apt install  -y ansible ansible-lint
             - ansible --version
 
   - name: Lint and Test Ansible Playbooks
