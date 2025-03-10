@@ -20,7 +20,7 @@ blocks:
       jobs:
         - name: Run Ansible Lint
           commands:
-            - ansible-lint playbooks/*.yaml
+            - ansible-lint ansible/playbooks/*.yaml
         - name: Run Syntax Check
           commands:
             - ansible-playbook --syntax-check -i ansible/inventory/production/hosts ansible/playbooks/site1.yaml &
